@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.UserMapper">
+<!-- 根据id获取用户信息 -->
+	<select id="selectuserbyid" parameterType="int" resultType="user">
+		select * from user where id = #{id}
+	</select>
+	
+	<select id="getAlluser"  resultType="user">
+	     select * from user
+	</select>
+<!-- 根据名字模糊查询 -->
+	<select id="chaxun"  parameterType="String" resultType="user">
+	    select * from user where name like '%${value}%'
+	</select>
+	<delete id="deleteuser" parameterType="int">
+        delete from user where id=#{id}
+	</delete>
+	
+<!-- 参数或返回值为hashmap查询 -->
+<!-- 	<select id="selectuserbyhashmap" parameterType="hashmap" resultType="hashmap">
+		select * from user where name like #{}
+	</select> -->
+	
+	<!-- 添加 -->
+	<insert id="insertuser" parameterType="pojo.User">
+		insert into user value(#{id},#{username},#{password})
+	</insert>
+ 	
+	<resultMap type="userTest" id="resultmap">
+		<id column="id" property="_id"/>
+		<result column="name" property="_username"/>
+		<result column="password" property="_password"/>
+	</resultMap>
+	
+	<select id="selectuserbyresultmap" resultMap="resultmap">
+		select * from user
+	</select>
+	
+	<select id="selectuserbywhere" resultType="list" parameterType="list">
+		select * from user where 
+		<foreach collection="list" item="id" separator="or">
+			id = #{id}
+		</foreach>
+	</select>
+</mapper>
+
